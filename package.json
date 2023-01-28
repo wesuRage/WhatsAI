@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "gpt": "ts-node-dev ./src/chatgpt.ts",
+    "gpt": "ts-node-dev ./src/functions/chatgpt.ts",
+    "gtts": "ts-node-dev ./src/functions/gtts.ts",
     "dev": "ts-node-dev ./src/start.ts",
     "start": "node ./build/start.js"
   },
@@ -20,6 +21,8 @@
     "@adiwajshing/baileys": "^5.0.0",
     "@hapi/boom": "^10.0.0",
     "dotenv": "^16.0.3",
+    "glob": "^8.1.0",
+    "gtts": "^0.1.1",
     "qrcode-terminal": "^0.12.0"
   }
 }

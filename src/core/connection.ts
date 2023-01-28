@@ -6,7 +6,7 @@ import path from 'path';
 
 export const connect = async () => {
     const {state, saveCreds} = await useMultiFileAuthState(
-        path.resolve(__dirname, '..', 'auth')
+        path.resolve(__dirname, '..', '..', 'auth')
     );
 
     const socket = makeWASocket({
