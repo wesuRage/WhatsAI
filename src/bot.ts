@@ -10,7 +10,7 @@ export default async () => {
         try{
             const msg = m.messages[0].message.conversation || m.messages[0].message.extendedTextMessage.text;
     
-            if (m.messages[0].message.conversation || m.messages[0].message.extendedTextMessage.text){
+            if (msg){
                 const prefix = msg.split(' ', 1)[0];
                 const rJid = m.messages[0].key.participant || m.messages[0].key.remoteJid;
     
