@@ -52,9 +52,9 @@ export default async () => {
 
                         break;
 
-                    case '$mid':
+                    case '$mid-diff':
 
-                        if(msg == '$mid'){
+                        if(msg == '$mid-diff'){
                             await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
                         }else{
                             await socket.sendMessage(rJid, {text: 'Gerando imagem...\nModelo: midjourney-diffusion\nℹ️ A geração pode levar um tempo.'}, {quoted: m.messages[0]});

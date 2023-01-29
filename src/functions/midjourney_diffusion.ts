@@ -17,5 +17,3 @@ export const Mid_Diff = async (prompt: string) => {
 
     return url;
 };
-
-// Mid_Diff('$mid-diff morcego azul de olhos vermelhos com asas abertas, super realista, fundo preto, sombreamento forte, pouca iluminação')
