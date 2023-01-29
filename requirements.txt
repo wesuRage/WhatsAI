@@ -1,0 +1,9 @@
+accelerate  
+diffusers[torch]
+googletrans==3.1.0a0
+safetensors
+scipy
+transformers[torch]
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==1.12.1+cpu

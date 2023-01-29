@@ -8,7 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 export const ChatGPT = async (prompt: string) => {
 
-    let _prompt: string = prompt.replace('$gpt', '').replace('$gpt-tts', '');
+    let _prompt = prompt.replace('$gpt', '').replace('$gpt-tts', '');
 
     const request = await openai.createCompletion({
         model: "text-davinci-003",
@@ -17,7 +17,7 @@ export const ChatGPT = async (prompt: string) => {
         max_tokens: 1024,
     });
 
-    const response: string = request.data.choices[0].text.replace('\n', '').replace('\n', '');
+    const response = request.data.choices[0].text.replace('\n', '').replace('\n', '');
 
     return response
 };
