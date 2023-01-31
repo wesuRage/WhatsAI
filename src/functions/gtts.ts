@@ -1,16 +1,22 @@
 import { ChatGPT } from "./chatgpt";
 import path from 'path';
-const gTTs = require('gtts');
+import fs from 'fs';
+import googleTTS from 'node-google-tts-api';
 
 export const gTTS = async (msg: string) => {
-    const texto = await ChatGPT(msg);
-    var gtts = new gTTs(texto, 'pt-br');
+    const _text = await ChatGPT(msg);
+    const Path = path.join(path.resolve(__dirname, '..', '..', 'cache') + `/audio.mp3`)
 
-    const Path = path.join(path.resolve(__dirname, '..', '..', 'cache/') + `/audio.mp3`)
+    const tts = new googleTTS();
+    await tts.get({
+        text: _text,
+        lang: 'pt-BR',
+        limit_bypass: true,
+    }).then((arr) => {
+        let audio = tts.concat(arr);
 
-    await gtts.save(Path,  (err, result) => {
-        if(err) { throw new Error(err) }
+        fs.writeFileSync(Path, audio);
     });
 
-    return `cache/audio.mp3`;
+    return Path;
 };

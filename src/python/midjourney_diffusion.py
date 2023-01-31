@@ -10,6 +10,7 @@ def midjourney_diffusion(prompt):
     _prompt = translator.translate(prompt)
 
     model_id = "stabilityai/stable-diffusion-2-1"
+    # model_id = "flax/midjourney-v4-diffusion"
 
     pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
@@ -19,7 +20,7 @@ def midjourney_diffusion(prompt):
     image = pipe(_prompt.text).images[0]
     image.save(imagePath)
 
-    return imagePath
+    print('\n\n\n\n\n\n\n\nDOONEEEEE')
 
 del sys.argv[0]
 prompt = " ".join(sys.argv)

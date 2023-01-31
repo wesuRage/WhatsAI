@@ -9,6 +9,7 @@ export const Mid_Diff = async (prompt: string) => {
 
     await process.stdout.on('data', (data) => {
         url = data.toString();
+        if(url == '\n\n\n\n\n\n\n\nDOONEEEEE') throw new Error('Done')
     });
 
     await process.stderr.on('data', (err: any) => {

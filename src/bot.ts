@@ -7,7 +7,6 @@ import fs from 'fs'
 export default async () => {
     const socket = await connect();
 
-
     socket.ev.on('messages.upsert', async (m) => {   
         console.log(JSON.stringify(m, undefined, 2));
 
@@ -37,17 +36,13 @@ export default async () => {
 
                     case '$gpt-tts':
 
+                        // await socket.sendMessage(rJid, {text: 'Temporariamente indisponível (ajustes).'}, {quoted: m.messages[0]});
+
                         if(msg == '$gpt-tts'){
                             await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
                         }else{
                             await socket.sendMessage(rJid, {text: 'Gerando audio...'}, {quoted: m.messages[0]});
-                            await gTTS(msg).then(
-                                (audio) => {
-                                    setTimeout(() => {
-                                        socket.sendMessage(rJid, {audio: {url: audio}, mimetype: 'audio/mp4', ptt: true}, {quoted: m.messages[0]})
-                                    }, 1000);
-                                }
-                            );
+                            await socket.sendMessage(rJid, {audio: {url: `${await gTTS(msg)}`}, mimetype: 'audio/mp4', ptt: true}, {quoted: m.messages[0]})
                         };
 
                         break;
