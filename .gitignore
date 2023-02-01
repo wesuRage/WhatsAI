@@ -1,7 +1,7 @@
 /auth/
 /build/
-/cache/
 /node_modules/
+/tmp/
 
 /.env
 /package-lock.json

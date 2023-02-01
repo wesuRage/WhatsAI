@@ -5,18 +5,24 @@ import googleTTS from 'node-google-tts-api';
 
 export const gTTS = async (msg: string) => {
     const _text = await ChatGPT(msg);
-    const Path = path.join(path.resolve(__dirname, '..', '..', 'cache') + `/audio.mp3`)
+    const Path = path.join(path.resolve(__dirname, '..', '..', 'tmp') + `/audio.mp3`)
 
     const tts = new googleTTS();
     await tts.get({
         text: _text,
         lang: 'pt-BR',
         limit_bypass: true,
-    }).then((arr) => {
-        let audio = tts.concat(arr);
+    }).then((arr: Buffer) => {
+        try{
+            const ab = new Array(arr);
+            let audio = tts.concat(ab);
+    
+            fs.writeFileSync(Path, audio);
 
-        fs.writeFileSync(Path, audio);
+        }catch{
+            let audio = tts.concat(arr);
+            fs.writeFileSync(Path, audio);        
+        };
     });
 
-    return Path;
 };

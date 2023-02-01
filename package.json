@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "/^/": "For production execute this commands:",
     "build": "tsc",
+    "start": "pm2 start ./build/start.js",
+    "stop": "pm2 stop all",
+    "/v/": "For development and debugging execute this commands:",
+    "dev": "ts-node-dev ./src/start.ts",
     "gpt": "ts-node-dev ./src/functions/chatgpt.ts",
     "gtts": "ts-node-dev ./src/functions/gtts.ts",
     "md": "ts-node-dev ./src/functions/midjourney_diffusion.ts",
-    "pmd": "python ./src/python/midjourney_diffusion.py a pitbull wearing a golden cap, sunglasses and a silver chain holding a rainbow beer",
-    "dev": "ts-node-dev ./src/start.ts",
-    "start": "node ./build/start.js"
+    "pmd": "python ./src/python/midjourney_diffusion.py",
+    "sing": "ts-node-dev ./src/functions/sing.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +30,8 @@
     "dotenv": "^16.0.3",
     "glob": "^8.1.0",
     "node-google-tts-api": "^1.1.1",
-    "qrcode-terminal": "^0.12.0"
+    "pm2": "^5.2.2",
+    "qrcode-terminal": "^0.12.0",
+    "xhr2": "^0.2.1"
   }
 }
