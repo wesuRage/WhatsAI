@@ -8,7 +8,8 @@ const openai = new OpenAIApi(configuration);
 
 export const ChatGPT = async (prompt: string) => {
 
-    let _prompt = prompt.replace('$gpt', '').replace('$gpt-tts', '');
+    const _prompt = prompt.replace('$gpt', '').replace('$gpt-tts', '');
+    console.log(_prompt)
 
     const request = await openai.createCompletion({
         model: "text-davinci-003",

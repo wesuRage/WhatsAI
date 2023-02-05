@@ -5,5 +5,16 @@ safetensors
 scipy
 transformers[torch]
 
+
+### For CPU image generation:
+
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==1.12.1+cpu
+
+
+### For GPU image generation:
+
+# --extra-index-url https://download.pytorch.org/whl/cu117
+# torch==1.13.1+cu117
+### Install CUDA 11.7: https://developer.nvidia.com/cuda-11-7-0-download-archive
+### And also update line 17 at /src/python/stable_diffusion.py (https://github.com/wesuRage/WhatsAI/blob/6458aa9aab667c154fe29bd9b56e0fc7a7422ca8/src/python/midjourney_diffusion.py#L17)

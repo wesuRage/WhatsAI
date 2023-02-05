@@ -1,29 +1,36 @@
+import { Stab_Diff } from "./functions/stable_diffusion";
+import { Stickerify } from "./functions/stickerify";
+import { Dall_E } from "./functions/dall-e/dall-e";
 import { ChatGPT } from "./functions/chatgpt";
 import { connect } from "./core/connection";
-import { xEvent } from "./core/xevents";
 import { gTTS } from "./functions/gtts";
-import { Mid_Diff } from "./functions/midjourney_diffusion";
 import { Sing } from "./functions/sing";
-import fs from 'fs';
+import { 
+    readFileSync, 
+    unlink, mkdirSync, 
+    existsSync} 
+from 'fs';
+import {
+    xEvent, 
+    Restart, 
+    Logs } 
+from "./core/utils";
 
 export default async () => {
     const socket = await connect();
 
     socket.ev.on('messages.upsert', async (m) => {   
-        console.log(JSON.stringify(m, undefined, 2));
+        if(!existsSync("./tmp/")){mkdirSync("./tmp/")};
 
-        if(!fs.existsSync("./tmp/")){fs.mkdirSync("./tmp/")};
+        Logs(m, true)
 
         try{
-
             const msg = m.messages[0].message.conversation || m.messages[0].message.extendedTextMessage.text;
             const rJid = m.messages[0].key.remoteJid;
 
             if(msg){
-                console.log(msg)
                 
                 switch(msg.split(' ', 1)[0]){
-
                     case '$gpt':
 
                         if(msg == '$gpt'){
@@ -36,7 +43,6 @@ export default async () => {
                                 await socket.sendMessage(rJid, {text: 'Erro ao gerar resposta.'}, {quoted: m.messages[0]});
                             };
                         };
-                        
                         break;
 
                     case '$gpt-tts':
@@ -45,31 +51,31 @@ export default async () => {
                             await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
                         }else{
                             await socket.sendMessage(rJid, {text: 'Gerando audio...'}, {quoted: m.messages[0]});
-                            await socket.sendMessage(rJid, {audio: {url: `${await gTTS(msg)}`}, mimetype: 'audio/mp4', ptt: true}, {quoted: m.messages[0]})
+                            const audio = await gTTS(msg)
+                            await socket.sendMessage(rJid, {audio: {url: `${audio}`}, mimetype: 'audio/mp4', ptt: true}, {quoted: m.messages[0]})
                             .then(() => {
-                                fs.unlink('tmp/audio.mp3', (err: any) => {
+                                unlink(audio, (err: any) => {
                                     if(err) throw err;
                                 });
                             });
                         };
-
                         break;
 
-                    case '$mid-diff':
+                    case '$stab-diff':
 
-                        if(msg == '$mid-diff'){
+                        if(msg == '$stab-diff'){
                             await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
                         }else{
-                            await socket.sendMessage(rJid, {text: 'Gerando imagem...\nModelo: midjourney-diffusion\nℹ️ A geração pode levar um tempo.'}, {quoted: m.messages[0]});
+                            await socket.sendMessage(rJid, {text: 'Gerando imagem...\nModelo: stable-diffusion\nℹ️ A geração pode levar um tempo.'}, {quoted: m.messages[0]});
                             await socket.sendMessage(rJid, {text: 'ℹ️ Tempo de geração estimado: 40-60 minutos (pc ruim pra geração de imagens).'});
                             
                             try{
-                                await Mid_Diff(msg)
-                                xEvent.on("image_generated", () => {
+                                await Stab_Diff(msg)
+                                xEvent.on('image_generated', () => {
                                     console.log("fim")
                                     socket.sendMessage(rJid, {image: {url: 'tmp/image.png'}}, {quoted: m.messages[0]})
                                     .then(() => {
-                                        fs.unlink('tmp/image.png', (err) => {
+                                        unlink('tmp/image.png', (err) => {
                                             if(err) throw err;
                                         });
                                     });
@@ -78,49 +84,53 @@ export default async () => {
                                 await socket.sendMessage(rJid, {text: 'Erro ao gerar imagem.'}, {quoted: m.messages[0]});
                             };
                         };
-
                         break;
 
-                    case "$sing":
+                    case '$sing':
+                        await socket.sendMessage(rJid, {text: 'Temporariamente indisponível'}, {quoted: m.messages[0]});
+                        
+                        break;
+                    
+                    case '$sticker':
 
-                        if(msg == '$sing'){
+                        if(msg == '$sticker'){
                             await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
                         }else{
-                            await socket.sendMessage(rJid, {text: 'Cantando música...'}, {quoted: m.messages[0]});
-                            
-                            try{
-                                await Sing(msg, () => {
-                                    xEvent.on('song_not_found', async () => {
-                                        await socket.sendMessage(rJid, {text: 'Música não encontrada.'}, {quoted: m.messages[0]});
-                                        return;
-                                    });
-    
-                                    socket.sendMessage(rJid, {audio: {url: 'tmp/audio.mp3'}, mimetype: 'audio/mp4', ptt: true}, {quoted: m.messages[0]})
-                                    .then(() => {
-                                        fs.unlink('tmp/audio.mp3', (err: any) => {
-                                            if(err) throw err;
-                                        });
-                                    });
+                            await socket.sendMessage(rJid, {text: 'Gerando figurinha...'}, {quoted: m.messages[0]});
+                            const dataI = m.messages[0].message.extendedTextMessage.contextInfo.quotedMessage
+
+                            Stickerify(msg, dataI, async () => {
+                                await socket.sendMessage(rJid, {sticker: readFileSync('tmp/sticker.webp')})
+                            }).then(() => {
+                                unlink('tmp/sticker.webp', (err) => {
+                                    if(err) throw err;
                                 });
-                            }catch{
-                                await socket.sendMessage(rJid, {text: 'Erro ao procurar música.'}, {quoted: m.messages[0]});
-                            };
+                            })
+
+                            xEvent.on('error_to_gen', async () => {
+                                await socket.sendMessage(rJid, {text: 'Erro ao gerar sticker.'}, {quoted: m.messages[0]});
+                            })
+                            
+                            xEvent.on('wrong_output_type', async () => {
+                                await socket.sendMessage(rJid, {text: 'Modo de uso: "$sticker --photo" ou "$sticker --video" marcando uma foto/video'}, {quoted: m.messages[0]});
+                            })
                         };
+                        break;
+                    
+                    case '$dall-e':
+                        if(msg == '$dall-e'){
+                            await socket.sendMessage(rJid, {text: 'Funcionando. Posso te ajudar em algo?'}, {quoted: m.messages[0]});
+                        }else{
+                            await socket.sendMessage(rJid, {text: 'Gerando imagem...'}, {quoted: m.messages[0]});
+                            await socket.sendMessage(rJid, {image: {url: `${await Dall_E(msg)}`}}, {quoted: m.messages[0]});
+                        }
                 };
             };
         }catch{
-            console.log('Message type not suported.');
+            //nothing
         };
     });
 
     // For production activate this:
-    // restart()
+    // Restart()
 };
-
-const restart = () => {
-    const _30minutes = 1000 * 60 * 30;
-
-    setTimeout(() => {
-        process.exit(0)
-    }, _30minutes);
-}

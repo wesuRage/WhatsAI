@@ -4,16 +4,18 @@
   "description": "",
   "scripts": {
     "/^/": "For production execute this commands:",
+
     "build": "tsc",
     "start": "pm2 start ./build/start.js",
     "stop": "pm2 stop all",
     "/v/": "For development and debugging execute this commands:",
+
     "dev": "ts-node-dev ./src/start.ts",
     "gpt": "ts-node-dev ./src/functions/chatgpt.ts",
     "gtts": "ts-node-dev ./src/functions/gtts.ts",
-    "md": "ts-node-dev ./src/functions/midjourney_diffusion.ts",
-    "pmd": "python ./src/python/midjourney_diffusion.py",
-    "sing": "ts-node-dev ./src/functions/sing.ts"
+    "sd": "ts-node-dev ./src/functions/stable_diffusion.ts",
+    "psd": "python ./src/python/stable_diffusion.py",
+    "dall": "ts-node-dev ./src/functions/dall-e/dall-e.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,13 +27,18 @@
   },
   "dependencies": {
     "@adiwajshing/baileys": "^5.0.0",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@google-cloud/translate": "^7.1.0",
     "@hapi/boom": "^10.0.0",
     "child_process": "^1.0.2",
     "dotenv": "^16.0.3",
+    "fluent-ffmpeg": "^2.1.2",
     "glob": "^8.1.0",
     "node-google-tts-api": "^1.1.1",
+    "pino": "^8.8.0",
     "pm2": "^5.2.2",
     "qrcode-terminal": "^0.12.0",
+    "wa-sticker-formatter": "^4.3.2",
     "xhr2": "^0.2.1"
   }
 }

@@ -1,11 +1,11 @@
 import { ChatGPT } from "./chatgpt";
-import path from 'path';
-import fs from 'fs';
+import { join, resolve} from 'path';
+import { writeFileSync } from 'fs';
 import googleTTS from 'node-google-tts-api';
 
 export const gTTS = async (msg: string) => {
     const _text = await ChatGPT(msg);
-    const Path = path.join(path.resolve(__dirname, '..', '..', 'tmp') + `/audio.mp3`)
+    const Path = join(resolve(__dirname, '..', '..', 'tmp') + `/${Math.floor(Math.random() * 10000)}.mp3`)
 
     const tts = new googleTTS();
     await tts.get({
@@ -17,12 +17,13 @@ export const gTTS = async (msg: string) => {
             const ab = new Array(arr);
             let audio = tts.concat(ab);
     
-            fs.writeFileSync(Path, audio);
+            writeFileSync(Path, audio);
 
         }catch{
             let audio = tts.concat(arr);
-            fs.writeFileSync(Path, audio);        
+            writeFileSync(Path, audio);        
         };
     });
 
+    return Path;
 };
