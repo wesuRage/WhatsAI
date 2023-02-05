@@ -1,33 +1,36 @@
-import { useMultiFileAuthState } from "@adiwajshing/baileys"
+import { useMultiFileAuthState } from "@adiwajshing/baileys";
 import makeWASocket from "@adiwajshing/baileys/lib/Socket";
 import { DisconnectReason } from "@adiwajshing/baileys/lib/Types";
 import { Boom } from "@hapi/boom";
-import path from 'path';
+import path from "path";
+import pino from "pino";
 
 export const connect = async () => {
-    const {state, saveCreds} = await useMultiFileAuthState(
-        path.resolve(__dirname, '..', '..', 'auth')
-    );
+  const { state, saveCreds } = await useMultiFileAuthState(
+    path.resolve(__dirname, "..", "..", "auth")
+  );
 
-    const socket = makeWASocket({
-        printQRInTerminal: true,
-        auth: state,
-    });
+  const socket = makeWASocket({
+    printQRInTerminal: true,
+    auth: state,
+    logger: pino({ level: "silent" }),
+  });
 
-    socket.ev.on('connection.update',async (update) => {
-        const {connection, lastDisconnect} = update;
+  socket.ev.on("connection.update", async (update) => {
+    const { connection, lastDisconnect } = update;
 
-        if (connection === 'close'){
-            const shouldReconnect = (lastDisconnect?.error as Boom)?.output
-                ?.statusCode !== DisconnectReason.loggedOut;
+    if (connection === "close") {
+      const shouldReconnect =
+        (lastDisconnect?.error as Boom)?.output?.statusCode !==
+        DisconnectReason.loggedOut;
 
-            if (shouldReconnect){
-                await connect();
-            };
-        };
-    });
+      if (shouldReconnect) {
+        await connect();
+      }
+    }
+  });
 
-    socket.ev.on('creds.update', saveCreds);
+  socket.ev.on("creds.update", saveCreds);
 
-    return socket;
+  return socket;
 };
