@@ -8,6 +8,8 @@
     "build": "tsc",
     "start": "pm2 start ./build/start.js",
     "stop": "pm2 stop all",
+
+    
     "/v/": "For development and debugging execute this commands:",
 
     "dev": "ts-node-dev ./src/start.ts",
