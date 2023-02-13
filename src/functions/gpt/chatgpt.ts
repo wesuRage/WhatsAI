@@ -1,15 +1,8 @@
-import { Configuration, OpenAIApi} from 'openai';
-require('dotenv').config();
-
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY
-});
-const openai = new OpenAIApi(configuration);
+import { openai } from '../../core/openai';
 
 export const ChatGPT = async (prompt: string) => {
 
     const _prompt = prompt.replace('$gpt', '').replace('$gpt-tts', '');
-    console.log(_prompt)
 
     const request = await openai.createCompletion({
         model: "text-davinci-003",
@@ -20,5 +13,5 @@ export const ChatGPT = async (prompt: string) => {
 
     const response = request.data.choices[0].text.replace('\n', '').replace('\n', '');
 
-    return response
+    return response;
 };

@@ -1,23 +1,16 @@
-import { downloadContentFromMessage, proto } from "@adiwajshing/baileys";
-
+import { downloadContentFromMessage } from "@adiwajshing/baileys";
+import { writeFileSync, readFileSync, unlinkSync } from "fs";
+import type { TFile } from "../core/TTypes";
 import ffmpeg from "fluent-ffmpeg";
 import webp from "node-webpmux";
-
-import { writeFileSync, readFileSync, unlinkSync } from "fs";
-
-type TFile =
-  | proto.Message.IImageMessage
-  | proto.Message.IVideoMessage
-  | proto.Message.IStickerMessage;
 
 const insertAttr = async (path) => {
   const img = new webp.Image();
 
-  // Depois você trocakkkk
   const json = {
-    "sticker-pack-id": `https://github.com/Ahosall`,
-    "sticker-pack-name": "Com 🤍",
-    "sticker-pack-publisher": "Ahosall",
+    "sticker-pack-id": `https://github.com/wesuRage`,
+    "sticker-pack-name": "WhatsAI",
+    "sticker-pack-publisher": "wesuRage",
     emojis: ["happy"],
   };
 
@@ -44,10 +37,10 @@ const convertImage = async (imgIn: string, imgOut: string) => {
       .on("error", reject)
       .on("end", () => resolve(true))
       .addOutputOptions([
-        `-vcodec`,
-        `libwebp`,
-        `-vf`,
-        `scale='min(350,iw)':min'(350,ih)':force_original_aspect_ratio=decrease,fps=15, pad=350:350:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`,
+        "-vcodec",
+        "libwebp",
+        "-vf",
+        "scale=512:512",
       ])
       .toFormat("webp")
       .save(imgOut);
@@ -72,13 +65,11 @@ const convertVideo = async (videoIn: string, videoOut: string) => {
         "-vcodec",
         "libwebp",
         "-vf",
-        "scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse",
+        "scale=512:512,fps=15",
         "-loop",
         "0",
         "-ss",
         "00:00:00",
-        "-t",
-        "00:00:05",
         "-preset",
         "default",
         "-an",
@@ -102,9 +93,9 @@ export const Sticker = async (file: TFile) => {
   var buffer = Buffer.from([]);
 
   const sticker = String(Math.floor(Math.random() * 10000));
-  const pathVIn = `./${sticker}.mp4`;
-  const pathIIn = `./${sticker}.png`;
-  const pathOut = `./${sticker}.webp`;
+  const pathVIn = `./tmp/${sticker}.mp4`;
+  const pathIIn = `./tmp/${sticker}.png`;
+  const pathOut = `./tmp/${sticker}.webp`;
 
   if (file.mimetype.split("/")[0] == "image") {
     const media = await downloadContentFromMessage(file, "image");

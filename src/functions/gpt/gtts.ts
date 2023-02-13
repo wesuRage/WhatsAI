@@ -1,7 +1,7 @@
+import googleTTS from 'node-google-tts-api';
 import { ChatGPT } from "./chatgpt";
 import { join, resolve} from 'path';
 import { writeFileSync } from 'fs';
-import googleTTS from 'node-google-tts-api';
 
 export const gTTS = async (msg: string) => {
     const _text = await ChatGPT(msg);

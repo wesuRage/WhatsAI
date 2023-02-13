@@ -4,9 +4,9 @@ import { xEvent } from '../core/utils';
 export const Stab_Diff = async (prompt: string) => {
     const _prompt = prompt.replace('$stab-diff', '');
 
-    const process = spawn('python', ['./src/python/stable_diffusion.py', `${_prompt}`]);
+    const process = spawn('python', ['./src/functions/python/stable_diffusion.py', `${_prompt}`]);
 
-    process.stderr.on('data', (err: any) => {
+    process.stderr.on('data', (err: Error) => {
         console.log(err.toString())
     });
 
