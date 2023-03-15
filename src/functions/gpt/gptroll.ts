@@ -18,5 +18,5 @@ export const GPTroll = async (prompt: string) => {
 
     const response = request.data.choices[0].text.replace('\n', '').replace('\n', '');
 
-    return "!ai " + response;
+    return response;
 };

@@ -35,8 +35,8 @@ export const DAN = async (prompt: string) => {
   const response = request.data.choices[0].text.replace('\n', '').replace('\n', '');
 
   if (response.includes("DAN: ")) {
-    return "!ia " + response.split("DAN: ")[1];
+    return response.split("DAN: ")[1];
   } else {
-    return "!ia " + response;
+    return response;
   }
 };

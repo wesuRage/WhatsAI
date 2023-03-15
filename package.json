@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "/^/": "For production execute this commands:",
+    "mongo": "ts-node-dev ./src/server/server.ts",
     "build": "tsc",
+    "kill": "pm2 delete all",
     "start": "pm2 start ./build/start.js",
     "stop": "pm2 stop all",
-    "/v/": "For development and debugging execute this commands:",
     "dev": "ts-node-dev ./src/start.ts",
-    "gpt": "ts-node-dev ./src/functions/chatgpt.ts",
+    "gpt": "ts-node-dev ./src/functions/gpt/chatgpt.ts",
     "gtts": "ts-node-dev ./src/functions/gtts.ts",
     "sd": "ts-node-dev ./src/functions/stable_diffusion.ts",
     "psd": "python ./src/python/stable_diffusion.py",
@@ -20,7 +20,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.20",
-    "openai": "^3.1.0",
+    "@types/node": "*",
+    "node-webpmux": "^3.1.5",
+    "openai": "^3.2.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.4"
   },

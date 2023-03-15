@@ -11,8 +11,8 @@ import type { TProps } from "./core/TTypes";
 import { gTTS } from "./functions/gpt/gtts";
 import { DAN } from "./functions/gpt/dan";
 import { Menu } from "./functions/menu";
+// import "./server/server";
 import fs from "fs";
-import { Dall_Get } from "./functions/dall-e/dall-get";
 
 const NormalizeContent = (msg: proto.IMessage) => {
   let props: TProps = { type: Object.keys(msg)[0] };
@@ -63,7 +63,7 @@ export default async () => {
       fs.mkdirSync("./tmp/");
     }
 
-    // console.log(JSON.stringify(m, null, 2))
+    console.log(JSON.stringify(m, null, 2))
     const rJid = m.messages[0].key.remoteJid;
 
     if (
@@ -75,13 +75,11 @@ export default async () => {
     try {
       const body = NormalizeContent(m.messages[0].message);
 
-      if (m.messages[0].message.listResponseMessage){
-        const list = ["u1", "u2", "u3", "u4",
-                      "v1", "v2", "v3", "v4"];
+      if (m.messages[0].message.listResponseMessage) {
         const listresponse = m.messages[0].message.listResponseMessage
-                            .singleSelectReply.selectedRowId;
+          .singleSelectReply.selectedRowId;
         const listid = listresponse.split(" ")[0];
-        
+
         await socket.sendMessage(
           rJid,
           { text: `o id é ${listid}` },
@@ -113,6 +111,7 @@ export default async () => {
             );
             break;
 
+
           case "$gpt":
 
             if (msg == "$gpt") {
@@ -143,6 +142,7 @@ export default async () => {
 
             break;
 
+
           case "$dan":
             if (msg == "$dan") {
               await socket.sendMessage(
@@ -169,6 +169,7 @@ export default async () => {
               }
             }
             break;
+
 
           case "$gptroll":
             if (msg == "$gptroll") {
@@ -198,6 +199,7 @@ export default async () => {
             }
             break;
 
+
           case "$gpt-tts":
             if (msg == "$gpt-tts") {
               await socket.sendMessage(
@@ -225,6 +227,7 @@ export default async () => {
                 });
             };
             break;
+
 
           case "$stab-diff":
             if (msg == "$stab-diff") {
@@ -272,6 +275,7 @@ export default async () => {
             }
             break;
 
+
           case "$sticker":
             if (messageQuoted) {
               messageType = Object.keys(messageQuoted)[0];
@@ -307,6 +311,7 @@ export default async () => {
 
             break;
 
+
           case "$dall-e":
             if (msg == "$dall-e") {
               await socket.sendMessage(
@@ -320,19 +325,19 @@ export default async () => {
                 { react: { text: "✅", key: m.messages[0].key } }
               );
               try {
-                const img = await Dall_E(msg)
-                // const list = Dall_Get(img.data[0].id)
+                const id = await Dall_E(msg)
+                // const list = Dall_Get(id)
 
                 xEvent.on("dall_e_gen", () => {
                   setTimeout(() => {
                     socket.sendMessage(
                       rJid,
-                      { image: { url: "tmp/single.png" },  },
+                      { image: { url: "tmp/single.png" }, },
                       { quoted: m.messages[0] }
                     )
-                    .then(() => {
-                     fs.unlinkSync("tmp/single.png");
-                    });
+                      .then(() => {
+                        fs.unlinkSync("tmp/single.png");
+                      });
                   }, 3000);
                 });
 
@@ -340,12 +345,12 @@ export default async () => {
                   socket.sendMessage(
                     rJid,
                     // { text: "a", jpegThumbnail: "tmp/four.png", buttonText: "options", sections: list },
-                    { image: {url: "tmp/four.png" } },
+                    { image: { url: "tmp/four.png" } },
                     { quoted: m.messages[0] }
                   )
-                  .then(() => {
-                    fs.unlinkSync("tmp/four.png");
-                  });
+                    .then(() => {
+                      fs.unlinkSync("tmp/four.png");
+                    });
                 });
 
               } catch {
@@ -357,6 +362,7 @@ export default async () => {
               };
             };
             break
+
 
           case "$dall-var":
             if (messageQuoted) {
@@ -395,6 +401,7 @@ export default async () => {
             };
             break;
 
+
           case "$test":
             const sections = [
               {
@@ -416,14 +423,38 @@ export default async () => {
                 ]
               },
             ]
-          
-          const listMessage = {
-            text: "",
-            buttonText: "list",
-            sections
-          }
 
-            await socket.sendMessage(rJid, listMessage)
+            const listMessage = {
+              text: "",
+              buttonText: "OPTIONS",
+              sections
+            }
+
+            const buttons = [
+              { buttonId: 'id1', buttonText: { displayText: 'Button 1' }, type: 1 },
+              { buttonId: 'id2', buttonText: { displayText: 'Button 2' }, type: 1 },
+              { buttonId: 'id3', buttonText: { displayText: 'Button 3' }, type: 1 }
+            ]
+
+            const buttonMessage = {
+              text: "",
+              footer: 'Hello World',
+              buttons: buttons,
+              headerType: 1
+            }
+
+            await socket.sendMessage(
+              rJid, 
+              buttonMessage, {
+                ephemeralExpiration: 604800
+              }
+            );
+
+            await socket.sendMessage(rJid, {image: { url: "tmp/doggo.png" }})
+            await socket.sendMessage(
+              rJid,
+              listMessage, { ephemeralExpiration: 604800 }
+            );
             break;
         };
       };
@@ -433,5 +464,5 @@ export default async () => {
   });
 
   // For production activate this:
-  // Restart()
+  Restart()
 };
