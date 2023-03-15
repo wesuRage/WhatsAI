@@ -1,17 +1,17 @@
 import { openai } from '../../core/openai';
 
-export const ChatGPT = async (content: string) => {
+export const ChatGPT = async (prompt: string) => {
 
-    const _content = content.replace('$gpt', '').replace('$gpt-tts', '');
+    const _prompt = prompt.replace('$gpt', '').replace('$gpt-tts', '');
 
-    const request = await openai.createChatCompletion({
+    const request = await openai.createCompletion({
         model: "gpt-3.5-turbo",
-        messages: [{role: "user", content: _content}],
+        prompt: _prompt,
         temperature: 0.2,
         max_tokens: 1024,
     })
 
-    const response = request.data.choices[0].message.content.replace('\n', '').replace('\n', '');
+    const response = request.data.choices[0].text.replace('\n', '').replace('\n', '');
 
     return response;
 };
