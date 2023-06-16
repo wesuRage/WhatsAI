@@ -1,5 +1,5 @@
-import { DisconnectReason, useMultiFileAuthState } from "@adiwajshing/baileys";
-import makeWASocket from "@adiwajshing/baileys/lib/Socket";
+import { DisconnectReason, useMultiFileAuthState } from "@WhiskeySockets/Baileys";
+import makeWASocket from "@WhiskeySockets/Baileys/lib/Socket";
 import { Boom } from "@hapi/boom";
 import pino from "pino";
 import path from 'path';

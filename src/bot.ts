@@ -3,16 +3,15 @@ import { Dall_Var } from "./functions/dall-e/dall-var";
 import { Dall_E } from "./functions/dall-e/dall-e";
 import { ChatGPT } from "./functions/gpt/chatgpt";
 import { GPTroll } from "./functions/gpt/gptroll";
-import { xEvent, Restart } from "./core/utils";
+import { xEvent, Restart, IsAdmin } from "./core/utils";
 import { Sticker } from "./functions/sticker";
-import { proto } from "@adiwajshing/baileys";
+import { proto } from "@WhiskeySockets/Baileys";
 import { connect } from "./core/connection";
 import type { TProps } from "./core/TTypes";
-import { gTTS } from "./functions/gpt/gtts";
-import { DAN } from "./functions/gpt/dan";
-import { Menu } from "./functions/menu";
-// import "./server/server";
 import fs from "fs";
+import { AntonioBot } from "./functions/gpt/antonio-bot";
+import { ChatGPT3_5 } from "./functions/gpt/chatgpt3-5";
+import { AntonioBot3_5 } from "./functions/gpt/antonio-bot3-5";
 
 const NormalizeContent = (msg: proto.IMessage) => {
   let props: TProps = { type: Object.keys(msg)[0] };
@@ -63,21 +62,18 @@ export default async () => {
       fs.mkdirSync("./tmp/");
     }
 
-    console.log(JSON.stringify(m, null, 2))
+    // console.log(JSON.stringify(m, null, 2));
     const rJid = m.messages[0].key.remoteJid;
 
-    if (
-      m.type != "notify" ||
-      rJid == "status@broadcast"
-    )
-      return;
+    if (m.type != "notify" || rJid == "status@broadcast") return;
 
     try {
       const body = NormalizeContent(m.messages[0].message);
 
       if (m.messages[0].message.listResponseMessage) {
-        const listresponse = m.messages[0].message.listResponseMessage
-          .singleSelectReply.selectedRowId;
+        const listresponse =
+          m.messages[0].message.listResponseMessage.singleSelectReply
+            .selectedRowId;
         const listid = listresponse.split(" ")[0];
 
         await socket.sendMessage(
@@ -85,7 +81,7 @@ export default async () => {
           { text: `o id é ${listid}` },
           { quoted: m.messages[0] }
         );
-      };
+      }
 
       if (
         body.type == "conversation" ||
@@ -103,17 +99,129 @@ export default async () => {
             : false;
 
         switch (msg.split(" ", 1)[0]) {
-          case "$menu":
-            await socket.sendMessage(
+          case "$":
+            let numeros: string[];
+            let usuarioMarcado: string;
+            const usuarioQueEnviouComando = m.messages[0].key.participant;
+
+            if (!IsAdmin(socket, rJid, usuarioQueEnviouComando)) {
+              socket.sendMessage(
+                rJid,
+                { text: "baitola" },
+                { quoted: m.messages[0] }
+              );
+
+              return;
+            }
+
+            if (messageQuoted) {
+              usuarioMarcado =
+                m.messages[0].message.extendedTextMessage.contextInfo
+                  .participant;
+            } else {
+              usuarioMarcado = msg.split(" ", 1)[0];
+            }
+
+            socket.sendMessage(
               rJid,
-              await Menu(),
+              { text: "indio" },
               { quoted: m.messages[0] }
             );
+
             break;
 
+          case "zap":
+
+            // for (let i = 79900000; i < 100000000; i++) {
+            for (let i = 85005426; i < 100000000; i++) {
+              
+              console.log(i)
+              const [result] = await socket.onWhatsApp(`5551${i}\n`);
+
+              if (result !== undefined) {
+                console.log(`número 5551${i} existe no whatsapp`)
+                fs.appendFileSync(`./tmp/51.txt`, `5551${i}\n`);
+              }
+            }
+
+
+
+            // const id = `5541${i}`;
+            // console.log(id)
+
+            // const [result] = await socket.onWhatsApp(id);
+            //   if (result !== undefined) await socket.sendMessage(
+            //       rJid,
+            //       { text: `wa.me/${id}` }
+            //     );
+
+            break;
+
+          case "$ab":
+            if (msg == "$ab") {
+              await socket.sendMessage(
+                rJid,
+                { text: "Funcionando. Posso te ajudar em algo?" },
+                { quoted: m.messages[0] }
+              );
+            } else {
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
+              try {
+                let user: string;
+
+                if (m.messages[0].key.participant) {
+                  user = m.messages[0].key.participant;
+                } else {
+                  user = rJid;
+                }
+
+                await socket.sendMessage(
+                  rJid,
+                  { text: `${await AntonioBot3_5(msg, user)}` },
+                  { quoted: m.messages[0] }
+                );
+              } catch {
+                await socket.sendMessage(
+                  rJid,
+                  { text: "Erro ao gerar resposta." },
+                  { quoted: m.messages[0] }
+                );
+              }
+            }
+
+            break;
+
+          case "$ab3":
+            if (msg == "$ab3") {
+              await socket.sendMessage(
+                rJid,
+                { text: "Funcionando. Posso te ajudar em algo?" },
+                { quoted: m.messages[0] }
+              );
+            } else {
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
+              try {
+                await socket.sendMessage(
+                  rJid,
+                  { text: `${await AntonioBot(msg)}` },
+                  { quoted: m.messages[0] }
+                );
+              } catch {
+                await socket.sendMessage(
+                  rJid,
+                  { text: "Erro ao gerar resposta." },
+                  { quoted: m.messages[0] }
+                );
+              }
+            }
+
+            break;
 
           case "$gpt":
-
             if (msg == "$gpt") {
               await socket.sendMessage(
                 rJid,
@@ -121,10 +229,45 @@ export default async () => {
                 { quoted: m.messages[0] }
               );
             } else {
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
+              try {
+                let user: string;
+
+                if (m.messages[0].key.participant) {
+                  user = m.messages[0].key.participant;
+                } else {
+                  user = rJid;
+                }
+
+                await socket.sendMessage(
+                  rJid,
+                  { text: `${await ChatGPT3_5(msg, user)}` },
+                  { quoted: m.messages[0] }
+                );
+              } catch {
+                await socket.sendMessage(
+                  rJid,
+                  { text: "Erro ao gerar resposta." },
+                  { quoted: m.messages[0] }
+                );
+              }
+            }
+
+            break;
+
+          case "$gpt3":
+            if (msg == "$gpt3") {
               await socket.sendMessage(
                 rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
+                { text: "Funcionando. Posso te ajudar em algo?" },
+                { quoted: m.messages[0] }
               );
+            } else {
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
               try {
                 await socket.sendMessage(
                   rJid,
@@ -142,35 +285,6 @@ export default async () => {
 
             break;
 
-
-          case "$dan":
-            if (msg == "$dan") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
-            } else {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
-              try {
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await DAN(msg)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { react: { text: "💖💖", key: m.messages[0].key } }
-                );
-              }
-            }
-            break;
-
-
           case "$gptroll":
             if (msg == "$gptroll") {
               await socket.sendMessage(
@@ -179,10 +293,9 @@ export default async () => {
                 { quoted: m.messages[0] }
               );
             } else {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
               try {
                 await socket.sendMessage(
                   rJid,
@@ -199,36 +312,6 @@ export default async () => {
             }
             break;
 
-
-          case "$gpt-tts":
-            if (msg == "$gpt-tts") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
-            } else {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
-              await socket
-                .sendMessage(
-                  rJid,
-                  {
-                    audio: { url: `${await gTTS(msg)}` },
-                    mimetype: "audio/mp4",
-                    ptt: true,
-                  },
-                  { quoted: m.messages[0] }
-                )
-                .then(() => {
-                  fs.unlinkSync("tmp/audio.mp3");
-                });
-            };
-            break;
-
-
           case "$stab-diff":
             if (msg == "$stab-diff") {
               await socket.sendMessage(
@@ -237,10 +320,9 @@ export default async () => {
                 { quoted: m.messages[0] }
               );
             } else {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
               await socket.sendMessage(
                 rJid,
                 {
@@ -275,7 +357,6 @@ export default async () => {
             }
             break;
 
-
           case "$sticker":
             if (messageQuoted) {
               messageType = Object.keys(messageQuoted)[0];
@@ -283,16 +364,15 @@ export default async () => {
             } else {
               messageType = Object.keys(message)[0];
               media = message[messageType];
-            };
+            }
 
             if (
               messageType == "imageMessage" ||
               messageType == "videoMessage"
             ) {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
 
               await socket.sendMessage(
                 rJid,
@@ -304,13 +384,12 @@ export default async () => {
                 rJid,
                 {
                   text: "Formato de mensagem inválido. \n\nEscolha uma imagem ou um vídeo.",
-                },
+                }, 
                 { quoted: m.messages[0] }
               );
-            };
+            }
 
             break;
-
 
           case "$dall-e":
             if (msg == "$dall-e") {
@@ -320,21 +399,20 @@ export default async () => {
                 { quoted: m.messages[0] }
               );
             } else {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
+              });
               try {
-                const id = await Dall_E(msg)
-                // const list = Dall_Get(id)
+                await Dall_E(msg);
 
                 xEvent.on("dall_e_gen", () => {
                   setTimeout(() => {
-                    socket.sendMessage(
-                      rJid,
-                      { image: { url: "tmp/single.png" }, },
-                      { quoted: m.messages[0] }
-                    )
+                    socket
+                      .sendMessage(
+                        rJid,
+                        { image: { url: "tmp/single.png" } },
+                        { quoted: m.messages[0] }
+                      )
                       .then(() => {
                         fs.unlinkSync("tmp/single.png");
                       });
@@ -342,27 +420,25 @@ export default async () => {
                 });
 
                 xEvent.on("dall_e_gen4", () => {
-                  socket.sendMessage(
-                    rJid,
-                    // { text: "a", jpegThumbnail: "tmp/four.png", buttonText: "options", sections: list },
-                    { image: { url: "tmp/four.png" } },
-                    { quoted: m.messages[0] }
-                  )
+                  socket
+                    .sendMessage(
+                      rJid,
+                      { image: { url: "tmp/four.png" } },
+                      { quoted: m.messages[0] }
+                    )
                     .then(() => {
                       fs.unlinkSync("tmp/four.png");
                     });
                 });
-
               } catch {
                 await socket.sendMessage(
                   rJid,
                   { text: "Falha ao gerar imagem." },
                   { quoted: m.messages[0] }
                 );
-              };
-            };
-            break
-
+              }
+            }
+            break;
 
           case "$dall-var":
             if (messageQuoted) {
@@ -371,25 +447,26 @@ export default async () => {
             } else {
               messageType = Object.keys(message)[0];
               media = message[messageType];
-            };
+            }
 
             if (messageType == "imageMessage") {
-              await socket.sendMessage(
-                rJid,
-                { react: { text: "✅", key: m.messages[0].key } }
-              );
-
-              const variation = await Dall_Var(media)
-              console.log(variation)
-
-              await socket.sendMessage(
-                rJid,
-                { image: { url: `${variation}` } },
-                { quoted: m.messages[0] }
-              ).then(() => {
-                fs.unlinkSync("tmp/variation.png")
-                fs.unlinkSync("tmp/va.png")
+              await socket.sendMessage(rJid, {
+                react: { text: "✅", key: m.messages[0].key },
               });
+
+              const variation = await Dall_Var(media);
+              console.log(variation);
+
+              await socket
+                .sendMessage(
+                  rJid,
+                  { image: { url: `${variation}` } },
+                  { quoted: m.messages[0] }
+                )
+                .then(() => {
+                  fs.unlinkSync("tmp/variation.png");
+                  fs.unlinkSync("tmp/va.png");
+                });
             } else {
               await socket.sendMessage(
                 rJid,
@@ -398,71 +475,18 @@ export default async () => {
                 },
                 { quoted: m.messages[0] }
               );
-            };
+            }
             break;
 
-
-          case "$test":
-            const sections = [
-              {
-                title: "Upscale",
-                rows: [
-                  { title: "U1", rowId: "$gpt diga u1" },
-                  { title: "U2", rowId: "u2" },
-                  { title: "U3", rowId: "u3" },
-                  { title: "U4", rowId: "u4" }
-                ]
-              },
-              {
-                title: "Variation",
-                rows: [
-                  { title: "V1", rowId: "v1" },
-                  { title: "V2", rowId: "v2" },
-                  { title: "V3", rowId: "v3" },
-                  { title: "V4", rowId: "v4" }
-                ]
-              },
-            ]
-
-            const listMessage = {
-              text: "",
-              buttonText: "OPTIONS",
-              sections
-            }
-
-            const buttons = [
-              { buttonId: 'id1', buttonText: { displayText: 'Button 1' }, type: 1 },
-              { buttonId: 'id2', buttonText: { displayText: 'Button 2' }, type: 1 },
-              { buttonId: 'id3', buttonText: { displayText: 'Button 3' }, type: 1 }
-            ]
-
-            const buttonMessage = {
-              text: "",
-              footer: 'Hello World',
-              buttons: buttons,
-              headerType: 1
-            }
-
-            await socket.sendMessage(
-              rJid, 
-              buttonMessage, {
-                ephemeralExpiration: 604800
-              }
-            );
-
-            await socket.sendMessage(rJid, {image: { url: "tmp/doggo.png" }})
-            await socket.sendMessage(
-              rJid,
-              listMessage, { ephemeralExpiration: 604800 }
-            );
+          case "$ban":
             break;
-        };
-      };
+        }
+      }
     } catch (err) {
       console.log(err);
-    };
+    }
   });
 
   // For production activate this:
-  Restart()
+  // Restart();
 };

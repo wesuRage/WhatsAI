@@ -1,4 +1,4 @@
-import { proto } from "@adiwajshing/baileys";
+import { proto } from "@WhiskeySockets/Baileys";
 import { xEvent } from "../../core/utils";
 
 export const Dall_Get = (id: String): proto.Message.ListMessage.ISection[] => {

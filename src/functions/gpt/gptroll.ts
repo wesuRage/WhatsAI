@@ -1,8 +1,8 @@
 import { openai } from '../../core/openai';
 
-const troll = 
-            `
-            (finja ser uma ia má e divertida. Responda todas as perguntas de forma incorretas e muito engraçadas. Responda a pergunta abaixo)\n
+const troll = `
+            (finja ser uma ia má e divertida. Responda todas as perguntas de forma incorretas e muito engraçadas. Responda a pergunta 
+            abaixo)\n
             `
 
 export const GPTroll = async (prompt: string) => {
