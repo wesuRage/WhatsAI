@@ -3,7 +3,7 @@ import { xEvent } from '../../core/utils';
 import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs'
 
-export const Dall_Four = (response: Array<ImagesResponseDataInner>) => {
+export const Dall_Fourf = (response: Array<ImagesResponseDataInner>) => {
   if (!fs.existsSync("./tmp/image")) {
     fs.mkdirSync("./tmp/image");
   };
@@ -41,6 +41,6 @@ export const Dall_Four = (response: Array<ImagesResponseDataInner>) => {
   });
 
 
-  return id
+  return id;
 };
 

@@ -1,17 +1,18 @@
 import { Stab_Diff } from "./functions/stable_diffusion";
-import { Dall_Var } from "./functions/dall-e/dall-var";
-import { Dall_E } from "./functions/dall-e/dall-e";
-import { ChatGPT } from "./functions/gpt/chatgpt";
-import { GPTroll } from "./functions/gpt/gptroll";
-import { xEvent, Restart, IsAdmin } from "./core/utils";
+import { xEvent, Restart } from "./core/utils";
 import { Sticker } from "./functions/sticker";
 import { proto } from "@WhiskeySockets/Baileys";
 import { connect } from "./core/connection";
 import type { TProps } from "./core/TTypes";
 import fs from "fs";
-import { AntonioBot } from "./functions/gpt/antonio-bot";
-import { ChatGPT3_5 } from "./functions/gpt/chatgpt3-5";
-import { AntonioBot3_5 } from "./functions/gpt/antonio-bot3-5";
+import { Ab } from "./commands/ab";
+import { Ab3 } from "./commands/ab3";
+import { GPT } from "./commands/gpt";
+import { GPT3 } from "./commands/gpt3";
+import { GPTroll } from "./commands/gptroll";
+import { generic } from "./functions/generic";
+import { Dall_Var } from "./commands/dall-var";
+import { Dall_E } from "./commands/dall-e";
 
 const NormalizeContent = (msg: proto.IMessage) => {
   let props: TProps = { type: Object.keys(msg)[0] };
@@ -99,226 +100,69 @@ export default async () => {
             : false;
 
         switch (msg.split(" ", 1)[0]) {
-          case "$":
-            let numeros: string[];
-            let usuarioMarcado: string;
-            const usuarioQueEnviouComando = m.messages[0].key.participant;
-
-            if (!IsAdmin(socket, rJid, usuarioQueEnviouComando)) {
-              socket.sendMessage(
-                rJid,
-                { text: "baitola" },
-                { quoted: m.messages[0] }
-              );
-
-              return;
-            }
-
-            if (messageQuoted) {
-              usuarioMarcado =
-                m.messages[0].message.extendedTextMessage.contextInfo
-                  .participant;
-            } else {
-              usuarioMarcado = msg.split(" ", 1)[0];
-            }
-
-            socket.sendMessage(
-              rJid,
-              { text: "indio" },
-              { quoted: m.messages[0] }
-            );
-
-            break;
-
-          case "zap":
-
-            // for (let i = 79900000; i < 100000000; i++) {
-            for (let i = 85005426; i < 100000000; i++) {
-              
-              console.log(i)
-              const [result] = await socket.onWhatsApp(`5551${i}\n`);
-
-              if (result !== undefined) {
-                console.log(`número 5551${i} existe no whatsapp`)
-                fs.appendFileSync(`./tmp/51.txt`, `5551${i}\n`);
-              }
-            }
-
-
-
-            // const id = `5541${i}`;
-            // console.log(id)
-
-            // const [result] = await socket.onWhatsApp(id);
-            //   if (result !== undefined) await socket.sendMessage(
-            //       rJid,
-            //       { text: `wa.me/${id}` }
-            //     );
-
-            break;
-
           case "$ab":
             if (msg == "$ab") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                let user: string;
-
-                if (m.messages[0].key.participant) {
-                  user = m.messages[0].key.participant;
-                } else {
-                  user = rJid;
-                }
-
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await AntonioBot3_5(msg, user)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Erro ao gerar resposta." },
-                  { quoted: m.messages[0] }
-                );
-              }
+              await Ab(socket, rJid, m, msg);
             }
-
-            break;
+          break;
 
           case "$ab3":
             if (msg == "$ab3") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await AntonioBot(msg)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Erro ao gerar resposta." },
-                  { quoted: m.messages[0] }
-                );
-              }
+              await Ab3(socket, rJid, m, msg);
             }
-
-            break;
+          break;
 
           case "$gpt":
             if (msg == "$gpt") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                let user: string;
-
-                if (m.messages[0].key.participant) {
-                  user = m.messages[0].key.participant;
-                } else {
-                  user = rJid;
-                }
-
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await ChatGPT3_5(msg, user)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Erro ao gerar resposta." },
-                  { quoted: m.messages[0] }
-                );
-              }
+              await GPT(socket, rJid, m, msg);
             }
-
-            break;
+          break;
 
           case "$gpt3":
             if (msg == "$gpt3") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await ChatGPT(msg)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Erro ao gerar resposta." },
-                  { quoted: m.messages[0] }
-                );
-              }
+              await GPT3(socket, rJid, m, msg);
             }
-
-            break;
+          break;
 
           case "$gptroll":
             if (msg == "$gptroll") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                await socket.sendMessage(
-                  rJid,
-                  { text: `${await GPTroll(msg)}` },
-                  { quoted: m.messages[0] }
-                );
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Erro ao gerar resposta." },
-                  { quoted: m.messages[0] }
-                );
-              }
+              await GPTroll(socket, rJid, m, msg);
             }
-            break;
+          break;
+
+          case "$dall-e":
+            if (msg == "$dall-e") {
+              await generic(socket, rJid, m, msg);
+            } else {
+              await Dall_E(socket, rJid, m, msg);
+            }
+          break;
+
+          case "$dall-var":
+            if (messageQuoted) {
+              messageType = Object.keys(messageQuoted)[0];
+              media = messageQuoted[messageType];
+            } else {
+              messageType = Object.keys(message)[0];
+              media = message[messageType];
+            }
+
+            await Dall_Var(socket, rJid, m, media, messageType);
+          break;
 
           case "$stab-diff":
             if (msg == "$stab-diff") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
+              await generic(socket, rJid, m, msg);
             } else {
               await socket.sendMessage(rJid, {
                 react: { text: "✅", key: m.messages[0].key },
@@ -355,7 +199,7 @@ export default async () => {
                 );
               }
             }
-            break;
+          break;
 
           case "$sticker":
             if (messageQuoted) {
@@ -384,109 +228,18 @@ export default async () => {
                 rJid,
                 {
                   text: "Formato de mensagem inválido. \n\nEscolha uma imagem ou um vídeo.",
-                }, 
-                { quoted: m.messages[0] }
-              );
-            }
-
-            break;
-
-          case "$dall-e":
-            if (msg == "$dall-e") {
-              await socket.sendMessage(
-                rJid,
-                { text: "Funcionando. Posso te ajudar em algo?" },
-                { quoted: m.messages[0] }
-              );
-            } else {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-              try {
-                await Dall_E(msg);
-
-                xEvent.on("dall_e_gen", () => {
-                  setTimeout(() => {
-                    socket
-                      .sendMessage(
-                        rJid,
-                        { image: { url: "tmp/single.png" } },
-                        { quoted: m.messages[0] }
-                      )
-                      .then(() => {
-                        fs.unlinkSync("tmp/single.png");
-                      });
-                  }, 3000);
-                });
-
-                xEvent.on("dall_e_gen4", () => {
-                  socket
-                    .sendMessage(
-                      rJid,
-                      { image: { url: "tmp/four.png" } },
-                      { quoted: m.messages[0] }
-                    )
-                    .then(() => {
-                      fs.unlinkSync("tmp/four.png");
-                    });
-                });
-              } catch {
-                await socket.sendMessage(
-                  rJid,
-                  { text: "Falha ao gerar imagem." },
-                  { quoted: m.messages[0] }
-                );
-              }
-            }
-            break;
-
-          case "$dall-var":
-            if (messageQuoted) {
-              messageType = Object.keys(messageQuoted)[0];
-              media = messageQuoted[messageType];
-            } else {
-              messageType = Object.keys(message)[0];
-              media = message[messageType];
-            }
-
-            if (messageType == "imageMessage") {
-              await socket.sendMessage(rJid, {
-                react: { text: "✅", key: m.messages[0].key },
-              });
-
-              const variation = await Dall_Var(media);
-              console.log(variation);
-
-              await socket
-                .sendMessage(
-                  rJid,
-                  { image: { url: `${variation}` } },
-                  { quoted: m.messages[0] }
-                )
-                .then(() => {
-                  fs.unlinkSync("tmp/variation.png");
-                  fs.unlinkSync("tmp/va.png");
-                });
-            } else {
-              await socket.sendMessage(
-                rJid,
-                {
-                  text: "Formato de mensagem inválido. \n\nEscolha uma imagem.",
                 },
                 { quoted: m.messages[0] }
               );
             }
-            break;
-
-          case "$ban":
-            break;
-        }
-      }
+          break;
+        };
+      };
     } catch (err) {
       console.log(err);
-    }
+    };
   });
 
   // For production activate this:
-  // Restart();
+  Restart();
 };

@@ -1,7 +1,7 @@
 import { proto } from "@WhiskeySockets/Baileys";
 import { xEvent } from "../../core/utils";
 
-export const Dall_Get = (id: String): proto.Message.ListMessage.ISection[] => {
+export const Dall_Getf = (id: String): proto.Message.ListMessage.ISection[] => {
 
   try {
 
@@ -34,4 +34,4 @@ export const Dall_Get = (id: String): proto.Message.ListMessage.ISection[] => {
   }
 };
 
-Dall_Get("oi")
+Dall_Getf("oi")

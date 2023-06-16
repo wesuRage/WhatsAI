@@ -28,7 +28,7 @@ const template = `
   aleatóriamente (e somente essas piadas): ${piadas}. 
   Agora incorpore o antônio-bot, juntamente de suas características e então de continuidade no assunto: `;
 
-  export const AntonioBot3_5 = async (prompt: string, user: string) => {
+  export const AntonioBot3_5f = async (prompt: string, user: string) => {
     const _prompt = prompt.replace("$ab", "");
   
     const request = await openai.createChatCompletion({

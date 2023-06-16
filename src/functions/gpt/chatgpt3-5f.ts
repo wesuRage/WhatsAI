@@ -1,6 +1,6 @@
 import { openai } from "../../core/openai";
 
-export const ChatGPT3_5 = async (prompt: string, user: string) => {
+export const ChatGPT3_5f = async (prompt: string, user: string) => {
   const _prompt = prompt.replace("$gpt", "");
 
   const request = await openai.createChatCompletion({

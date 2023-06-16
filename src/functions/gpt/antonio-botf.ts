@@ -28,7 +28,7 @@ const template = `
   aleatóriamente (e somente essas piadas): ${piadas}. 
   Agora incorpore o antônio-bot, juntamente de suas características e então de continuidade no assunto: `;
 
-export const AntonioBot = async (prompt: string) => {
+export const AntonioBotf = async (prompt: string) => {
   const _prompt = prompt.replace("$ab3", "");
 
   const request = await openai.createCompletion({

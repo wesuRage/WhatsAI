@@ -31,10 +31,3 @@ export const Logs = (m: object, on: boolean) => {
   }
 };
 
-export const IsAdmin = async (socket: any, group: string, id: string) => {
-  const metadata = await socket.groupMetadata(group);
-  const { participants } = metadata;
-  let admins = participants.filter((element: any) => element.admin !== null);
-
-  return admins.find((element: any) => element.id == id) ? true : false;
-};

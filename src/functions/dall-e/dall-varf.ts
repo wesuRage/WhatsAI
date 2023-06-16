@@ -5,7 +5,7 @@ import { openai } from '../../core/openai';
 import { xEvent } from '../../core/utils'
 import ffmpeg from "fluent-ffmpeg";
 
-export const Dall_Var = async (image: TImage) => {
+export const Dall_Varf = async (image: TImage) => {
 
   let response: string;
   let buffer = Buffer.from([]);

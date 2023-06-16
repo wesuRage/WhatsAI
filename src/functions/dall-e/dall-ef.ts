@@ -1,6 +1,6 @@
 import { openai } from '../../core/openai';
 import { xEvent } from '../../core/utils';
-import { Dall_Four } from './dall-four';
+import { Dall_Fourf } from './dall-fourf';
 import { writeFileSync } from "fs"
 
 const fourImages = async (prompt: string,) => {
@@ -12,11 +12,11 @@ const fourImages = async (prompt: string,) => {
     });
 
     const response = request.data.data;
-    return Dall_Four(response);
+    return Dall_Fourf(response);
 
 };
 
-export const Dall_E = async (prompt: string) => {
+export const Dall_Ef = async (prompt: string) => {
 
     const _prompt = prompt.replace('$dall-e', '').replace('--four', '');
 

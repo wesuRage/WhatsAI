@@ -5,7 +5,7 @@ const troll = `
             abaixo)\n
             `
 
-export const GPTroll = async (prompt: string) => {
+export const GPTrollf = async (prompt: string) => {
 
     const _prompt = prompt.replace('$gpt', '');
 
