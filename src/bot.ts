@@ -13,6 +13,12 @@ import { GPTroll } from "./commands/gptroll";
 import { generic } from "./functions/generic";
 import { Dall_Var } from "./commands/dall-var";
 import { Dall_E } from "./commands/dall-e";
+import { Regras } from "./commands/regras";
+import { Ban } from "./commands/ban";
+import { Add } from "./commands/add";
+
+import { Group } from "./core/groupMetadata";
+import { WASocket } from "@whiskeysockets/baileys";
 
 const NormalizeContent = (msg: proto.IMessage) => {
   let props: TProps = { type: Object.keys(msg)[0] };
@@ -63,8 +69,9 @@ export default async () => {
       fs.mkdirSync("./tmp/");
     }
 
-    // console.log(JSON.stringify(m, null, 2));
+    console.log(JSON.stringify(m, null, 2));
     const rJid = m.messages[0].key.remoteJid;
+    const participant = m.messages[0].key.participant;
 
     if (m.type != "notify" || rJid == "status@broadcast") return;
 
@@ -99,14 +106,39 @@ export default async () => {
             ? message.extendedTextMessage.contextInfo.quotedMessage
             : false;
 
+        var gp = null;
+        let hasAdmin = async (user: string) => false;
+
+        if (rJid.endsWith("g.us")) { // temos que melhorar issoKKKKK
+          gp = new Group(await socket.groupMetadata(rJid)); // OK importa pra mim essa porra aiKKKKK
+          hasAdmin = async (user: string): Promise<boolean> =>
+            gp.admins.includes(user);
+        }
+
+        let args = msg.split(' ').slice(1); 
+
         switch (msg.split(" ", 1)[0]) {
+          case "$ban":
+            if (gp && hasAdmin(rJid)) {
+              await Ban(socket, args, rJid, participant);
+            } else {
+              await socket.sendMessage(rJid, {
+                text: "Você não possui permissão para usar este comando.",
+              });
+            }
+            break;
+
+          case "$add":
+            await Add(socket, msg, rJid, participant);
+            break;
+
           case "$ab":
             if (msg == "$ab") {
               await generic(socket, rJid, m, msg);
             } else {
               await Ab(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$ab3":
             if (msg == "$ab3") {
@@ -114,7 +146,7 @@ export default async () => {
             } else {
               await Ab3(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$gpt":
             if (msg == "$gpt") {
@@ -122,7 +154,7 @@ export default async () => {
             } else {
               await GPT(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$gpt3":
             if (msg == "$gpt3") {
@@ -130,7 +162,7 @@ export default async () => {
             } else {
               await GPT3(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$gptroll":
             if (msg == "$gptroll") {
@@ -138,7 +170,7 @@ export default async () => {
             } else {
               await GPTroll(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$dall-e":
             if (msg == "$dall-e") {
@@ -146,7 +178,7 @@ export default async () => {
             } else {
               await Dall_E(socket, rJid, m, msg);
             }
-          break;
+            break;
 
           case "$dall-var":
             if (messageQuoted) {
@@ -158,7 +190,11 @@ export default async () => {
             }
 
             await Dall_Var(socket, rJid, m, media, messageType);
-          break;
+            break;
+
+          case "$regras":
+            await Regras(socket, rJid, m);
+            break;
 
           case "$stab-diff":
             if (msg == "$stab-diff") {
@@ -199,7 +235,7 @@ export default async () => {
                 );
               }
             }
-          break;
+            break;
 
           case "$sticker":
             if (messageQuoted) {
@@ -232,12 +268,12 @@ export default async () => {
                 { quoted: m.messages[0] }
               );
             }
-          break;
-        };
-      };
+            break;
+        }
+      }
     } catch (err) {
       console.log(err);
-    };
+    }
   });
 
   // For production activate this:

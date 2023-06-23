@@ -1,21 +1,13 @@
-import { AntonioBot3_5f } from "../functions/gpt/antonio-bot3-5f";
+import { AntonioBotf } from "../functions/gpt/antonio-botf";
 
 export const Ab3 = async (socket: any, rJid: string, m: any, msg: string) => {
   await socket.sendMessage(rJid, {
     react: { text: "✅", key: m.messages[0].key },
   });
   try {
-    let user: string;
-  
-    if (m.messages[0].key.participant) {
-      user = m.messages[0].key.participant;
-    } else {
-      user = rJid;
-    };
-  
     await socket.sendMessage(
       rJid,
-      { text: `${await AntonioBot3_5f(msg, user)}` },
+      { text: `${await AntonioBotf(msg)}` },
       { quoted: m.messages[0] }
     );
   } catch {
