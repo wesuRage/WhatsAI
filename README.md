@@ -1,17 +1,18 @@
 ﻿# WhatsAI
 
-Um bot de WhatsApp usando ChatGTP, Dall-E e Stable-Diffusion!
+Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E e Stable-Diffusion para geração de imagens!
 
 ### Uso
 
 - Texto: 
-    - chatGPT: `$gpt sua pergunta`
-    - GPTroll: `$gptroll sua pergunta` (Manda respostas incorretas e engraçadas)
+    - ChatGPT: `$gpt {pergunta}` (Normal, como o ChatGPT)
+    - GPTroll: `$gptroll {pergunta}` (Manda respostas incorretas e engraçadas)
+    - Antônio-bot: `$ab {pergunta}` (Te responde de maneira "educada")
 - Imagem: 
-    - stable-diffusion-2.1: `$stab-diff pedir imagem`
-    - Dall-E: `$dall-e pedir imagem` (Adicione "--four" para 4 resultados)
-    - Dall-Var: `$dall-var pedir variação de imagem`
-- Sticker: `$sticker` (Marque um video/foto ou envie direto no video/foto)
+    - stable-diffusion-2.1: `$stab-diff {prompt de imagem}`
+    - DALL-E: `$dall-e {prompt de imagem}` (Adicione o argumento "--four" para 4 resultados)
+    - DALL-Var: `$dall-var {variação da imagem}`
+- Sticker: `$sticker` (Marque um video/foto ou envie direto um video/foto, e receberá uma figurinha)
 
 ### Instalação
 
