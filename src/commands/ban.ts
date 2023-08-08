@@ -1,10 +1,6 @@
 import { Group } from "../core/groupMetadata";
 import { WASocket } from "@whiskeysockets/baileys";
 
-const button = [
-  { buttonId: "add", buttonText: { displayText: "Desfazer" }, type: 1 },
-];
-
 export const Ban = async (
   socket: WASocket,
   args: string[],

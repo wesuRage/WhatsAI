@@ -1,12 +1,13 @@
 import { Stab_Diff } from "./functions/stable_diffusion";
-import { xEvent, Restart } from "./core/utils";
+import { xEvent } from "./core/utils";
 import { Sticker } from "./functions/sticker";
-import { proto } from "@WhiskeySockets/Baileys";
+import { proto } from "@whiskeySockets/baileys";
 import { connect } from "./core/connection";
 import type { TProps } from "./core/TTypes";
 import fs from "fs";
 import { Ab } from "./commands/ab";
 import { Ab3 } from "./commands/ab3";
+import { Tg } from "./commands/tg";
 import { GPT } from "./commands/gpt";
 import { GPT3 } from "./commands/gpt3";
 import { GPTroll } from "./commands/gptroll";
@@ -18,7 +19,7 @@ import { Ban } from "./commands/ban";
 import { Add } from "./commands/add";
 
 import { Group } from "./core/groupMetadata";
-import { WASocket } from "@whiskeysockets/baileys";
+
 
 const NormalizeContent = (msg: proto.IMessage) => {
   let props: TProps = { type: Object.keys(msg)[0] };
@@ -118,7 +119,7 @@ export default async () => {
         let args = msg.split(' ').slice(1); 
 
         switch (msg.split(" ", 1)[0]) {
-          case "$ban":
+          case "$1290921":
             if (gp && hasAdmin(rJid)) {
               await Ban(socket, args, rJid, participant);
             } else {
@@ -128,8 +129,8 @@ export default async () => {
             }
             break;
 
-          case "$add":
-            await Add(socket, msg, rJid, participant);
+          case "$1290921":
+            await Add(socket, msg, rJid);
             break;
 
           case "$ab":
@@ -145,6 +146,14 @@ export default async () => {
               await generic(socket, rJid, m, msg);
             } else {
               await Ab3(socket, rJid, m, msg);
+            }
+            break;
+
+          case "$tg":
+            if (msg == "$tg") {
+              await generic(socket, rJid, m, msg);
+            } else {
+              await Tg(socket, rJid, m, msg);
             }
             break;
 
@@ -275,7 +284,4 @@ export default async () => {
       console.log(err);
     }
   });
-
-  // For production activate this:
-  Restart();
 };

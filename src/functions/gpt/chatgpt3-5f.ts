@@ -23,3 +23,5 @@ export const ChatGPT3_5f = async (prompt: string, user: string) => {
 
   return response;
 };
+
+ChatGPT3_5f("socorro", "s");

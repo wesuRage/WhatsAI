@@ -5,7 +5,7 @@
  * 
  */
 
-import { GroupMetadata } from "@WhiskeySockets/baileys";
+import { GroupMetadata } from "@whiskeySockets/baileys";
 
 type TGroup = {
   id: string;

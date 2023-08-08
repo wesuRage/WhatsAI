@@ -28,25 +28,25 @@ const template = `
   aleatóriamente (e somente essas piadas): ${piadas}. 
   Agora incorpore o antônio-bot, juntamente de suas características e então de continuidade no assunto: `;
 
-  export const AntonioBot3_5f = async (prompt: string, user: string) => {
-    const _prompt = prompt.replace("$ab", "");
-  
-    const request = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: template },
-        { role: "user", content: _prompt },
-      ],
-      temperature: 0.2,
-      max_tokens: 1024,
-      presence_penalty: 2,
-      frequency_penalty: 3,
-      user: user,
-    });
-  
-    const response = request.data.choices[0].message.content
-      .replace("\n", "");
-  
-    return response;
-  };
+export const AntonioBot3_5f = async (prompt: string, user: string) => {
+  const _prompt = prompt.replace("$ab", "");
+
+  const request = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [
+      { role: "system", content: template },
+      { role: "user", content: _prompt },
+    ],
+    temperature: 0.2,
+    max_tokens: 1024,
+    presence_penalty: 2,
+    frequency_penalty: 3,
+    user: user,
+  });
+
+  const response = request.data.choices[0].message.content
+    .replace("\n", "");
+
+  return response;
+};
   

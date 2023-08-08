@@ -17,14 +17,6 @@ export const xEvent = {
   },
 };
 
-export const Restart = () => {
-  const _30minutes = 1000 * 60 * 30;
-
-  setTimeout(() => {
-    process.exit(0);
-  }, _30minutes);
-};
-
 export const Logs = (m: object, on: boolean) => {
   if (on) {
     console.log(JSON.stringify(m, undefined, 2));

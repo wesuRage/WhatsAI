@@ -6,8 +6,9 @@ Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E e Stable-D
 
 - Texto: 
     - ChatGPT: `$gpt {pergunta}` (Normal, como o ChatGPT)
-    - GPTroll: `$gptroll {pergunta}` (Manda respostas incorretas e engraçadas)
+    - GPTroll: `$gptroll {pergunta}` (Manda respostas incorretas e (as vezes) engraçadas)
     - Antônio-bot: `$ab {pergunta}` (Te responde de maneira "educada")
+    - TigresaVIP: `$tg {pergunta}` (Vai ser sua nova namorada)
 - Imagem: 
     - stable-diffusion-2.1: `$stab-diff {prompt de imagem}`
     - DALL-E: `$dall-e {prompt de imagem}` (Adicione o argumento "--four" para 4 resultados)
@@ -16,7 +17,7 @@ Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E e Stable-D
 
 ### Instalação
 
-- Instale o **ffmpeg** via `apt`
+- Instale o **ffmpeg**
     ```s
     sudo apt install ffmpeg -y
     ``` 
@@ -44,12 +45,9 @@ OPENAI_API_KEY="SUA_API_KEY"
 - Execute o código com `npm run dev`
 - Dê uma olhada nos scripts do `package.json` para testes isolados ou debugs
 
-### Restart
-
-Em produção, você pode e **deve** resetar o bot após um período de tempo para previnir um bug do Baileys parar de detectar novas mensagens. Para isso, descomente a [***linha 436***](https://github.com/wesuRage/WhatsAI/blob/6458aa9aab667c154fe29bd9b56e0fc7a7422ca8/src/bot.ts#L436) no arquivo `src/bot.ts`.
 
 > ### Em erros de conexão com o WhatsApp
-> *Você talvez tenha que rodar o código duas vezes, já que aparentemente tem um bug na dependencia do Baileys. Então para isso siga os passos:*
+> *Você talvez tenha que rodar o código duas vezes, já que aparentemente tem um bug na dependência do Baileys. Então para isso siga os passos:*
 
 > - Escaneie o QR Code e espere até a tela de scan fechar.
 > - Pare a execução no terminal com `Ctrl + C`
