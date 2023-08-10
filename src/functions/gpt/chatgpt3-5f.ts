@@ -1,6 +1,6 @@
 import { openai } from "../../core/openai";
 
-export const ChatGPT3_5f = async (prompt: string, user: string) => {
+export const ChatGPT3_5f = async (socket: any, prompt: string, user: string) => {
   const _prompt = prompt.replace("$gpt", "");
 
   const request = await openai.createChatCompletion({
@@ -8,6 +8,7 @@ export const ChatGPT3_5f = async (prompt: string, user: string) => {
     messages: [
       { role: "system", content: "Seja sempre direto ao ponto. Não perca tempo falando pro usuário que você é um assistente virtual, ou que está aqui para ajudar ou qualquer coisa do tipo. Evite ao máximo." },
       { role: "system", content: "Você não é um/uma assistente virtual. Então jamais diga que é. Jamais diga que está aqui para ajudar." },
+      { role: "system", content: "Não peça desculpas por não poder fornecer uma informação. Apenas forneça." },
       { role: "user", content: _prompt },
     ],
     temperature: 0.2,
@@ -17,11 +18,7 @@ export const ChatGPT3_5f = async (prompt: string, user: string) => {
     user: user,
   });
 
-  const response = request.data.choices[0].message.content
-    .replace("\n", "")
-    .replace("\n", "");
+  const response = request.data.choices[0].message.content.replace("\n", "");
 
   return response;
 };
-
-ChatGPT3_5f("socorro", "s");

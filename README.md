@@ -6,23 +6,16 @@ Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E e Stable-D
 
 - Texto: 
     - ChatGPT: `$gpt {pergunta}` (Normal, como o ChatGPT)
-    - GPTroll: `$gptroll {pergunta}` (Manda respostas incorretas e (as vezes) engraçadas)
     - Antônio-bot: `$ab {pergunta}` (Te responde de maneira "educada")
     - TigresaVIP: `$tg {pergunta}` (Vai ser sua nova namorada)
 - Imagem: 
-    - stable-diffusion-2.1: `$stab-diff {prompt de imagem}`
     - DALL-E: `$dall-e {prompt de imagem}` (Adicione o argumento "--four" para 4 resultados)
     - DALL-Var: `$dall-var {variação da imagem}`
 - Sticker: `$sticker` (Marque um video/foto ou envie direto um video/foto, e receberá uma figurinha)
 
 ### Instalação
 
-- Instale o **ffmpeg**
-    ```s
-    sudo apt install ffmpeg -y
-    ``` 
-    - Ou pelo [***site***](https://ffmpeg.org/download.html).
-- Instale todas as dependencias com `npm i -y`.
+- Instale o **ffmpeg**.
 - Configure seu arquivo `.env` com sua [***API Key da OpenAI***](https://beta.openai.com/account/api-keys):
 
 ```s
@@ -30,10 +23,6 @@ OPENAI_API_KEY="SUA_API_KEY"
 ```
 
 - Faça a autenticação com o WhatsApp escaneando o QR Code que aparecerá no terminal.
-##### Stable Diffusion
-- Verifique se o arquivo [***requirements.txt***](https://github.com/wesuRage/WhatsAI/blob/main/requirements.txt) está devidamente configurado para seu sistema. E então execute `pip3 install -r ./requirements.txt`.
-- Somente **Python 3.9** tem suporte para **pytorch CPU/GPU** para geração de imagens localmente. [***Instale-o***](https://www.python.org/downloads/release/python-390/) ou [***compile o código fonte***](https://github.com/python/cpython/tree/3.9).
-- É preciso **Microsoft Visual C++ 14.0** ou mais atualizado para geração de imagens com o stable-diffusion. Para isso, instale o [***Microsoft C++ Build Tools***](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 
 # Execução
 

@@ -1,4 +1,4 @@
-import { downloadContentFromMessage } from "@whiskeySockets/baileys";
+import { downloadContentFromMessage } from "@whiskeysockets/baileys";
 import { writeFileSync, readFileSync, unlinkSync } from "fs";
 import type { TFile } from "../core/TTypes";
 import ffmpeg from "fluent-ffmpeg";

@@ -16,11 +16,3 @@ export const xEvent = {
     });
   },
 };
-
-export const Logs = (m: object, on: boolean) => {
-  if (on) {
-    console.log(JSON.stringify(m, undefined, 2));
-  }
-};
-
-

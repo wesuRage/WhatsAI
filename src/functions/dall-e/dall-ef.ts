@@ -4,40 +4,39 @@ import { Dall_Fourf } from './dall-fourf';
 import { writeFileSync } from "fs"
 
 const fourImages = async (prompt: string,) => {
-    const request = await openai.createImage({
-        prompt: prompt,
-        n: 4,
-        size: '512x512',
-        response_format: 'b64_json',
-    });
+  const request = await openai.createImage({
+    prompt: prompt,
+    n: 4,
+    size: '512x512',
+    response_format: 'b64_json',
+  });
 
-    const response = request.data.data;
-    return Dall_Fourf(response);
+  const response = request.data.data;
+  return Dall_Fourf(response);
 
 };
 
 export const Dall_Ef = async (prompt: string) => {
+  const _prompt = prompt.replace('$dall-e', '').replace('--four', '');
 
-    const _prompt = prompt.replace('$dall-e', '').replace('--four', '');
+  if (prompt.includes('--four')) {
+    return fourImages(_prompt);
+  } else {
+    const request = await openai.createImage({
+      prompt: _prompt,
+      n: 1,
+      size: '512x512',
+      response_format: 'b64_json',
+    });
+    
+    const buffer = request.data.data[0].b64_json;
 
-    if (prompt.includes('--four')) {
-        return fourImages(_prompt);
-    } else {
-        const request = await openai.createImage({
-            prompt: _prompt,
-            n: 1,
-            size: '512x512',
-            response_format: 'b64_json',
-        });
-
-        const buffer = request.data.data[0].b64_json;
-
-        const img = Buffer.from(buffer, 'base64')
+    const img = Buffer.from(buffer, 'base64')
         
-        writeFileSync("./tmp/single.png", img);
+    writeFileSync("./tmp/single.png", img);
 
-        setTimeout(() => {
-            xEvent.emit("dall_e_gen");
-        }, 3000);
-    };
+    setTimeout(() => {
+       xEvent.emit("dall_e_gen");
+    }, 3000);
+  };
 };

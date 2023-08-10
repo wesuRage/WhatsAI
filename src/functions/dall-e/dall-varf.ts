@@ -1,4 +1,4 @@
-import { downloadContentFromMessage } from "@whiskeySockets/baileys";
+import { downloadContentFromMessage } from "@whiskeysockets/baileys";
 import { createReadStream, writeFileSync } from 'fs'
 import type { TImage } from "../../core/TTypes";
 import { openai } from '../../core/openai';
