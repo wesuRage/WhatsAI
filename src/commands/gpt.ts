@@ -11,9 +11,13 @@ export const GPT = async (socket: any, rJid: string, m: any, msg: string) => {
       user = m.messages[0].key.participant;
     } else {
       user = rJid;
-    };
-
-    await ChatGPT3_5f(socket, rJid, m, msg, user, true);
+    }
+    
+    await socket.sendMessage(
+      rJid,
+      { text: `${await ChatGPT3_5f(socket, rJid, m, msg, user, false)}` },
+      { quoted: m.messages[0] }
+    );
 
   } catch {
     await socket.sendMessage(

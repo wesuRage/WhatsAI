@@ -1,6 +1,6 @@
-import { ChatGPT3_5f } from "../functions/gpt/chatgpt3-5f";
+import { ChatGPT3f } from "../functions/gpt/chatgpt3f";
 
-export const GPTS = async (socket: any, rJid: string, m: any, msg: string) => {
+export const GPT3S = async (socket: any, rJid: string, m: any, msg: string) => {
   await socket.sendMessage(rJid, {
     react: { text: "✅", key: m.messages[0].key },
   });
@@ -11,13 +11,9 @@ export const GPTS = async (socket: any, rJid: string, m: any, msg: string) => {
       user = m.messages[0].key.participant;
     } else {
       user = rJid;
-    }
-    
-    await socket.sendMessage(
-      rJid,
-      { text: `${await ChatGPT3_5f(socket, rJid, m, msg, user, false)}` },
-      { quoted: m.messages[0] }
-    );
+    };
+
+    await ChatGPT3f(socket, rJid, m, msg, user, true);
 
   } catch {
     await socket.sendMessage(

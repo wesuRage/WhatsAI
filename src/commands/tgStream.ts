@@ -1,6 +1,6 @@
-import { AntonioBot3_5f } from "../functions/gpt/antonio-bot3-5f";
+import { TigresaVIP3_5f } from "../functions/gpt/tigresavip3-5";
 
-export const AbS = async (socket: any, rJid: string, m: any, msg: string) => {
+export const TgS = async (socket: any, rJid: string, m: any, msg: string) => {
   await socket.sendMessage(rJid, {
     react: { text: "✅", key: m.messages[0].key },
   });
@@ -13,11 +13,8 @@ export const AbS = async (socket: any, rJid: string, m: any, msg: string) => {
       user = rJid;
     };
   
-    await socket.sendMessage(
-      rJid,
-      { text: `${await AntonioBot3_5f(socket, rJid, m, msg, user, false)}` },
-      { quoted: m.messages[0] }
-    );
+    await TigresaVIP3_5f(socket, rJid, m, msg, user, true);
+    
   } catch {
     await socket.sendMessage(
       rJid,

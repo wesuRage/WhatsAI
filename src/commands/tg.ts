@@ -13,8 +13,11 @@ export const Tg = async (socket: any, rJid: string, m: any, msg: string) => {
       user = rJid;
     };
   
-    await TigresaVIP3_5f(socket, rJid, m, msg, user, true);
-    
+    await socket.sendMessage(
+      rJid,
+      { text: `${await TigresaVIP3_5f(socket, rJid, m, msg, user, false)}` },
+      { quoted: m.messages[0] }
+    );
   } catch {
     await socket.sendMessage(
       rJid,
