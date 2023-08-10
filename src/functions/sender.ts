@@ -10,7 +10,7 @@ export const Sender = async (
   let message_chunks = [];
 
   const placeholder = await socket.sendMessage(rJid, { text: "_Streaming de mensagem não suportado. Atualize seu WhatsApp ou use os estáticos: $gpts, $abs, $tgs._" }, { quoted: m.messages[0] })
-  setTimeout(async () => {}, 500);
+  setTimeout(async () => {}, 1000);
   
   stream.on("data", async (chunk: Buffer) => {
     const payloads = chunk.toString().split("\n\n");
