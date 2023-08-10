@@ -1,6 +1,6 @@
 ﻿# WhatsAI
 
-Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E e Stable-Diffusion para geração de imagens!
+Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E para geração de imagens!
 
 ### Uso
 
