@@ -6,7 +6,7 @@
     "mongo": "ts-node-dev ./src/server/server.ts",
     "build": "tsc",
     "kill": "pm2 delete all",
-    "start": "pm2 start ./build/start.js --restart-delay=1800",
+    "start": "pm2 start ./build/start.js --restart-delay=300",
     "stop": "pm2 stop all",
     "dev": "ts-node-dev ./src/start.ts",
     "gpt": "ts-node-dev ./src/functions/gpt/chatgpt3-5f.ts",
