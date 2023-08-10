@@ -33,7 +33,7 @@ export const TigresaVIP3_5f = async (
 ) => {
   
   if (stream) {
-    const _prompt = prompt.replace("$tg", "");
+    const _prompt = prompt.replace("$tgs", "");
 
     const request = await openai.createChatCompletion(
       {
@@ -54,7 +54,7 @@ export const TigresaVIP3_5f = async (
 
     Sender(socket, rJid, m, request);
   } else {
-    const _prompt = prompt.replace("$tgs", "");
+    const _prompt = prompt.replace("$tg", "");
 
     const request = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",

@@ -67,7 +67,7 @@ export default async () => {
       }
     };
 
-    Logs(m, true);
+    Logs(m, false);
 
     const rJid = m.messages[0].key.remoteJid;
     if (m.type != "notify" || rJid == "status@broadcast") return;

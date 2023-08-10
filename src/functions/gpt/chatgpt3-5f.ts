@@ -11,7 +11,7 @@ export const ChatGPT3_5f = async (
 ) => {
   
   if (stream) {
-    const _prompt = prompt.replace("$gpt", "");
+    const _prompt = prompt.replace("$gpts", "");
 
     const request = await openai.createChatCompletion(
       {
@@ -43,10 +43,10 @@ export const ChatGPT3_5f = async (
       },
       { responseType: "stream" }
     );
-
+    
     Sender(socket, rJid, m, request);
   } else {
-    const _prompt = prompt.replace("$gpts", "");
+    const _prompt = prompt.replace("$gpt", "");
 
     const request = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",

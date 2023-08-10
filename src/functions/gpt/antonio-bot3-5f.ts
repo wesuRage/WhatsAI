@@ -39,7 +39,7 @@ export const AntonioBot3_5f = async (
 ) => {
 
   if (stream) {
-    const _prompt = prompt.replace("$ab", "");
+    const _prompt = prompt.replace("$abs", "");
 
     const request = await openai.createChatCompletion(
       {
@@ -60,7 +60,7 @@ export const AntonioBot3_5f = async (
 
     Sender(socket, rJid, m, request);
   } else {
-    const _prompt = prompt.replace("$abs", "");
+    const _prompt = prompt.replace("$ab", "");
 
     const request = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
