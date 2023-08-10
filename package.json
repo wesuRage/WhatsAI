@@ -28,6 +28,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
+    "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.0",
     "@whiskeysockets/baileys": "^6.2.1",
     "dotenv": "^16.0.3",
