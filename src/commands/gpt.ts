@@ -1,5 +1,4 @@
 import { ChatGPT3_5f } from "../functions/gpt/chatgpt3-5f";
-import { StreamTest } from "../functions/gpt/teste";
 
 export const GPT = async (socket: any, rJid: string, m: any, msg: string) => {
   await socket.sendMessage(rJid, {
@@ -12,8 +11,9 @@ export const GPT = async (socket: any, rJid: string, m: any, msg: string) => {
       user = m.messages[0].key.participant;
     } else {
       user = rJid;
-    }
-    await StreamTest(socket, rJid, m, msg, user);
+    };
+
+    await ChatGPT3_5f(socket, rJid, m, msg, user, true);
 
   } catch {
     await socket.sendMessage(

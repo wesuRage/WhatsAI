@@ -3,6 +3,9 @@ import { proto } from "@whiskeysockets/baileys";
 import { connect } from "./core/connection";
 import type { TProps } from "./core/TTypes";
 import fs from "fs";
+import { AbS } from "./commands/abStatic";
+import { TgS } from "./commands/tgStatic";
+import { GPTS } from "./commands/gptStatic";
 import { Ab } from "./commands/ab";
 import { Tg } from "./commands/tg";
 import { GPT } from "./commands/gpt";
@@ -112,6 +115,18 @@ export default async () => {
           case "$gpt":
             if (msg == "$gpt") { await generic(socket, rJid, m, msg) }
             else { await GPT(socket, rJid, m, msg) } break;
+
+          case "$abs":
+            if (msg == "$abs") { await generic(socket, rJid, m, msg) }
+            else { await AbS(socket, rJid, m, msg) } break;
+
+          case "$tgs":
+            if (msg == "$tgs") { await generic(socket, rJid, m, msg) }
+            else { await TgS(socket, rJid, m, msg) } break;
+
+          case "$gpts":
+            if (msg == "$gpts") { await generic(socket, rJid, m, msg) }
+            else { await GPTS(socket, rJid, m, msg) } break;
 
           case "$dall-e":
             if (msg == "$dall-e") { await generic(socket, rJid, m, msg) }

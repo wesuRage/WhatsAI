@@ -13,11 +13,8 @@ export const Ab = async (socket: any, rJid: string, m: any, msg: string) => {
       user = rJid;
     };
   
-    await socket.sendMessage(
-      rJid,
-      { text: `${await AntonioBot3_5f(msg, user)}` },
-      { quoted: m.messages[0] }
-    );
+    await AntonioBot3_5f(socket, rJid, m, msg, user, true);
+    
   } catch {
     await socket.sendMessage(
       rJid,

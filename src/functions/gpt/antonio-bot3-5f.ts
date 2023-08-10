@@ -1,4 +1,5 @@
 import { openai } from "../../core/openai";
+import { Sender } from "../sender";
 
 const piadas = `
 "Não sei se você sabe, nos teatros da Alemanha tem assentos pra judeus. É o cinzeiro.",
@@ -28,25 +29,54 @@ const template = `
   aleatóriamente (e somente essas piadas): ${piadas}. 
   Agora incorpore o antônio-bot, juntamente de suas características e então de continuidade no assunto: `;
 
-export const AntonioBot3_5f = async (prompt: string, user: string) => {
-  const _prompt = prompt.replace("$ab", "");
+export const AntonioBot3_5f = async (
+  socket: any,
+  rJid: string,
+  m: any,
+  prompt: string,
+  user: string,
+  stream: boolean
+) => {
 
-  const request = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "system", content: template },
-      { role: "user", content: _prompt },
-    ],
-    temperature: 0.2,
-    max_tokens: 1024,
-    presence_penalty: 2,
-    frequency_penalty: 3,
-    user: user,
-  });
+  if (stream) {
+    const _prompt = prompt.replace("$ab", "");
 
-  const response = request.data.choices[0].message.content
-    .replace("\n", "");
+    const request = await openai.createChatCompletion(
+      {
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: template },
+          { role: "user", content: _prompt },
+        ],
+        temperature: 0.2,
+        max_tokens: 1024,
+        presence_penalty: 2,
+        frequency_penalty: 3,
+        user: user,
+        stream: true,
+      },
+      { responseType: "stream" }
+    );
 
-  return response;
+    Sender(socket, rJid, m, request);
+  } else {
+    const _prompt = prompt.replace("$abs", "");
+
+    const request = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: template },
+        { role: "user", content: _prompt },
+      ],
+      temperature: 0.2,
+      max_tokens: 1024,
+      presence_penalty: 2,
+      frequency_penalty: 3,
+      user: user,
+    });
+
+    const response = request.data.choices[0].message.content.replace("\n", "");
+
+    return response;
+  }
 };
-  
