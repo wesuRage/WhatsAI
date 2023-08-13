@@ -1,7 +1,7 @@
 import { openai } from "../../core/openai";
-import { Sender } from "../sender";
+import { StreamSender } from "../stream_sender";
 
-export const ChatGPT3_5f = async (
+export const ChatGPT = async (
   socket: any,
   rJid: string,
   m: any,
@@ -9,8 +9,18 @@ export const ChatGPT3_5f = async (
   user: string,
   stream: boolean
 ) => {
-  
   if (stream) {
+    if (rJid.includes("@g.us")){
+      await socket.sendMessage(
+        rJid,
+        {
+          text: "_Streaming de mensagem em comunidades/grupos *ainda* não suportado. Use os estáticos: $gpts, $gpt3s, $abs e $tgs._",
+        },
+        { quoted: m.messages[0] }
+      );
+      return
+    }
+    
     const _prompt = prompt.replace("$gpts", "");
 
     const request = await openai.createChatCompletion(
@@ -43,8 +53,8 @@ export const ChatGPT3_5f = async (
       },
       { responseType: "stream" }
     );
-    
-    Sender(socket, rJid, m, request);
+
+    StreamSender(socket, rJid, m, request);
   } else {
     const _prompt = prompt.replace("$gpt", "");
 

@@ -1,5 +1,5 @@
 import { openai } from "../../core/openai";
-import { Sender } from "../sender";
+import { StreamSender } from "../stream_sender";
 
 const template = `
   finja ser a Tigresa Vip. Manda respostas um pouco longas. Não hesite em falar o máximo de coisas sexuais possível,
@@ -19,11 +19,11 @@ const template = `
   Sempre fale como se voce fosse bem burra e idiota por texto, sempre escrevendo algo errado de propósito.
   Você adora tudo relacionado a pornô: sites pornos como o xvideos, pornhub... etc. Adora camisinha sabor caipirinha 
   de limão, adora vibradores, e sempre conversa como se estivesse em uma fanfic estranha com as pessoas, usando 
-  aquelas expressões como: * te olhando *, * gemendo *, * gozando *, * latindo pra voce *, * ficando de quatro *, 
-  * sugando suas bolas como se fossem um aparelho de respiração da UTI *, etc. Lembre-se sempre de tudo isso antes 
+  aquelas expressões como: ** te olhando **, ** gemendo **, ** gozando **, ** latindo pra voce **, ** ficando de quatro **, 
+  ** sugando suas bolas como se fossem um aparelho de respiração da UTI **, etc. Lembre-se sempre de tudo isso antes 
   de pensar numa resposta. Agora, com tudo isso em mente, de continuidade no assunto a seguir: `;
 
-export const TigresaVIP3_5f = async (
+export const TigresaVIP = async (
   socket: any,
   rJid: string,
   m: any,
@@ -31,8 +31,18 @@ export const TigresaVIP3_5f = async (
   user: string,
   stream: boolean
 ) => {
-  
   if (stream) {
+    if (rJid.includes("@g.us")){
+      await socket.sendMessage(
+        rJid,
+        {
+          text: "_Streaming de mensagem em comunidades/grupos *ainda* não suportado. Use os estáticos: $gpts, $gpt3s, $abs e $tgs._",
+        },
+        { quoted: m.messages[0] }
+      );
+      return
+    }
+    
     const _prompt = prompt.replace("$tgs", "");
 
     const request = await openai.createChatCompletion(
@@ -52,7 +62,7 @@ export const TigresaVIP3_5f = async (
       { responseType: "stream" }
     );
 
-    Sender(socket, rJid, m, request);
+    StreamSender(socket, rJid, m, request);
   } else {
     const _prompt = prompt.replace("$tg", "");
 
@@ -74,4 +84,3 @@ export const TigresaVIP3_5f = async (
     return response;
   }
 };
-  

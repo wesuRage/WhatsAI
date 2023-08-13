@@ -5,18 +5,20 @@ Um bot de WhatsApp que usa o ChatGPT para geração de texto e DALL-E para gera�
 ### Uso
 
 - Texto: 
-    - ChatGPT: `$gpt {pergunta}` (Normal, como o ChatGPT)
+    - ChatGPT-3.5: `$gpt {pergunta}` (Versão (grátis) mais atual do ChatGPT)
+    - ChatGPT-3: `$gpt3 {pergunta}` (Versão (grátis) antiga)
     - Antônio-bot: `$ab {pergunta}` (Te responde de maneira "educada")
     - TigresaVIP: `$tg {pergunta}` (Vai ser sua nova namorada)
+    > Em dispositivos onde o recurso de streaming ainda não está disponível, atualize seu WhatsApp ou use os estáticos: $gpts, $gpt3s, $abs e $tgs.
 - Imagem: 
     - DALL-E: `$dall-e {prompt de imagem}` (Adicione o argumento "--four" para 4 resultados)
-    - DALL-Var: `$dall-var {variação da imagem}`
-- Sticker: `$sticker` (Marque um video/foto ou envie direto um video/foto, e receberá uma figurinha)
+    - DALL-Var: `$dall-var {variação de imagem}`
+- Sticker: `$sticker` (Marque ou envie em uma foto/video para receber uma figurinha)
 
 ### Instalação
 
 - Instale o **ffmpeg**.
-- Configure seu arquivo `.env` com sua [***API Key da OpenAI***](https://beta.openai.com/account/api-keys):
+- Configure seu arquivo `.env` com sua [***API Key da OpenAI***](https://platform.openai.com/account/api-keys):
 
 ```s
 OPENAI_API_KEY="SUA_API_KEY"
@@ -35,9 +37,9 @@ OPENAI_API_KEY="SUA_API_KEY"
 - Dê uma olhada nos scripts do `package.json` para testes isolados ou debugs
 
 
-> ### Em erros de conexão com o WhatsApp
-> *Você talvez tenha que rodar o código duas vezes, já que aparentemente tem um bug na dependência do Baileys. Então para isso siga os passos:*
+### Em erros de conexão com o WhatsApp
+*Você talvez tenha que rodar o código duas vezes, já que aparentemente tem um bug na dependência do Baileys. Então para isso siga os passos:*
 
-> - Escaneie o QR Code e espere até a tela de scan fechar.
-> - Pare a execução no terminal com `Ctrl + C`
-> - Execute o código de novo.
+- Escaneie o QR Code e espere até a tela de scan fechar.
+- Pare a execução no terminal com `Ctrl + C`
+- Execute o código de novo.

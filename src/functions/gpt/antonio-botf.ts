@@ -1,5 +1,5 @@
 import { openai } from "../../core/openai";
-import { Sender } from "../sender";
+import { StreamSender } from "../stream_sender";
 
 const piadas = `
 "Não sei se você sabe, nos teatros da Alemanha tem assentos pra judeus. É o cinzeiro.",
@@ -29,7 +29,7 @@ const template = `
   aleatóriamente (e somente essas piadas): ${piadas}. 
   Agora incorpore o antônio-bot, juntamente de suas características e então de continuidade no assunto: `;
 
-export const AntonioBot3_5f = async (
+export const AntonioBot = async (
   socket: any,
   rJid: string,
   m: any,
@@ -37,8 +37,18 @@ export const AntonioBot3_5f = async (
   user: string,
   stream: boolean
 ) => {
-
   if (stream) {
+    if (rJid.includes("@g.us")){
+      await socket.sendMessage(
+        rJid,
+        {
+          text: "_Streaming de mensagem em comunidades/grupos *ainda* não suportado. Use os estáticos: $gpts, $gpt3s, $abs e $tgs._",
+        },
+        { quoted: m.messages[0] }
+      );
+      return
+    }
+    
     const _prompt = prompt.replace("$abs", "");
 
     const request = await openai.createChatCompletion(
@@ -58,7 +68,7 @@ export const AntonioBot3_5f = async (
       { responseType: "stream" }
     );
 
-    Sender(socket, rJid, m, request);
+    StreamSender(socket, rJid, m, request);
   } else {
     const _prompt = prompt.replace("$ab", "");
 

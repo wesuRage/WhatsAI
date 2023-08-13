@@ -4,7 +4,7 @@ import { Boom } from "@hapi/boom";
 import pino from "pino";
 import path from 'path';
 
-export const connect = async () => {
+export const Connect = async () => {
 
   const { state, saveCreds } = await useMultiFileAuthState(
     path.resolve(__dirname, "..", "..", "auth")
@@ -28,7 +28,7 @@ export const connect = async () => {
         ?.statusCode !== DisconnectReason.loggedOut;
 
       if (shouldReconnect) {
-        await connect();
+        await Connect();
       }
     }
   });
